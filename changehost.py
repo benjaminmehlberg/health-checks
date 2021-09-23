@@ -3,43 +3,48 @@ import os
 import re
 import csv
 
-os.chdir("/home/pi/programs/files/filesystem")
+filesystem = os.path.expanduser("~/programs/files/filesystem")
+os.chdir(filesystem)
 
-def crawl_dirs(dirs_list, dirs_list_copy, files_list):
-    """Crawl directories beginning from current directory and store them in
-    dirs_list and csv-files in files_list"""
 
-    current = os.listdir()
+def crawl_dirs(dirs_all, dirs_process, files_all):
+    """
+    Crawl directories beginning from current directory and store them in
+    dirs_all and csv-files in files_all
+    """
+
+    current_dir = os.listdir()
 
     # Parse one directory and store directories and files in lists
-    if len(current) > 0:
-        for item in current:
-            if os.path.isdir(item) and item not in dirs_list:
+    if current_dir:
+        for item in current_dir:
+            if os.path.isdir(item) and item not in dirs_all:
                 fullpath = os.path.join(os.getcwd(), item)
-                dirs_list.append(fullpath)
-                dirs_list_copy.append(fullpath)
+                dirs_all.append(fullpath)
+                dirs_process.append(fullpath)
 
-            if os.path.isfile(item) and re.search(r".+\.csv$", item) and item not in files_list:
+            if os.path.isfile(item) and re.search(r".+\.csv$", item) and item not in files_all:
                 fullpath = os.path.join(os.getcwd(), item)
-                files_list.append(fullpath)
-                print(fullpath)
+                files_all.append(fullpath)
+                print("Found csv-file: ",fullpath)
     else:
         os.chdir("../")
 
-    # Recursively crawl through all directories in dirs_list_copy
-    if len(dirs_list_copy) > 0:
-        os.chdir(dirs_list_copy.pop())
-        return crawl_dirs(dirs_list, dirs_list_copy, files_list)
+    # Recursively crawl through all directories in dirs_process
+    if dirs_process:
+        os.chdir(dirs_process.pop())
+        return crawl_dirs(dirs_all, dirs_process, files_all)
     else:
-        return dirs_list, dirs_list_copy, files_list
+        return dirs_all, dirs_process, files_all
 
 
-def change_files(files_list):
-    """Iterate through csv files and change email data"""
-    
-    while len(files_list) > 0:
-        currentfile = files_list.pop()
-        with open(currentfile) as file:
+def change_files(files_all):
+    """
+    Iterate through csv files and change email data
+    """
+    while files_all:
+        current_file = files_all.pop()
+        with open(current_file) as file:
             data = csv.reader(file, delimiter=",")
             for row in data:
                 # Skip header line
@@ -47,22 +52,19 @@ def change_files(files_list):
                     continue
                     
                 # Update host names in the email addresses    
-                result = re.sub(r"(.+@)abc\.edu.*", r"\1" + "xyz.com", row[1])
+                result = re.sub(r"(.+@)abc\.edu.*", r"\1" + "newhost.com", row[1])
                 if result:
-                    print(f"name: {row[0]:20}  host: {result}")
+                    print(f"Name: {row[0]:20}  Email: {result}")
 
 
 def main():
 
-    dirs_list, dirs_list_copy, files_list = [], [], []
-
     # Call crawl_dirs function
-    dirs_list, temp, files_list = crawl_dirs(dirs_list, dirs_list_copy, files_list)
+    dirs_all, dirs_process, files_all = crawl_dirs(list(), list(), list())
 
-    print("Number of directories: ", len(dirs_list))
-    print("Number of csv-files: ", len(files_list))
+    print("Number of csv-files: ", len(files_all), "\n")
 
-    change_files(files_list)
+    change_files(files_all)
 
     
 main()

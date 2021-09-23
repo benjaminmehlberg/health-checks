@@ -15,15 +15,14 @@ checks = {
     "free": ["Free memory in megabytes", "free", "-m"],
     "sar DEV": ["Network interface workload", "sar", "-n", "DEV", freq],
     "sar TCP": ["TCP workload", "sar", "-n", "TCP", freq],
-    "top": ["Live Process summary", "atop"]
     }
 
 for name, check in checks.items():
-    print("----------------------------------------", "\n", name)
-    print(check[0], "\n")
-    lst = ["timeout", intervall, *check[1:]]
-    print(lst)
-    subprocess.run(lst, shell=False)
+    print("----------------------------------------------------------------------")
+    print(name.center(70))
+    print(check[0].center(70), "\n\n")
+    command = ["timeout", intervall, *check[1:]]
+    subprocess.run(command, shell=False)
     choice = input("Enter 'q' to quit or press <Enter> to continue >>")
     if choice.lower() == 'q':
         break
