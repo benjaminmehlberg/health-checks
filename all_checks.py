@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+A script to perform multiple system health checks
+"""
 import shutil
 import psutil
 import os
@@ -40,7 +43,7 @@ def localhost_present():
     return res.returncode != 0
 
 def cpu_temperature():
-    """Display the current CPU temperature"""
+    """Check the current CPU temperature"""
 
     res = int(subprocess.run(["cat", "/sys/class/thermal/thermal_zone0/temp"], capture_output=True).stdout.decode().strip())
     return res < 80000
