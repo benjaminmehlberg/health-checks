@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+A script to perform mutliple system health checks
+"""
 import shutil
 import psutil
 import os
