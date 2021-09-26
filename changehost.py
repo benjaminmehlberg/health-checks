@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+A script to get csv-files in a filessystem, parse them for e-mail addresses
+and manipulate the addresses
+"""
 import os
 import re
 import csv
