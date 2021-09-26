@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+A script to perform multiple system checks for troubleshooting
+"""
 import subprocess
 import time
 import os
@@ -6,15 +9,24 @@ import os
 intervall = "10s"
 freq = "1"
 checks = {
-    "uptime": ["To check average load in the last 1, 5, 15 minutes", "uptime"],
-    "dmesg": ["To check last 10 system messages", "dmesg"],
-    "vmstat": ["Virtual memory load, r = number of processes waiting for CPU", "vmstat", freq],
-    "mpstat": ["CPU time breakdowns per CPU", "mpstat", "-P", "ALL", freq],
-    "pidstat": ["Rolling Process summary", "pidstat", freq],
-    "iostat": ["Workload/Performance for block devices (disks)", "iostat", "-xz", freq],
-    "free": ["Free memory in megabytes", "free", "-m"],
-    "sar DEV": ["Network interface workload", "sar", "-n", "DEV", freq],
-    "sar TCP": ["TCP workload", "sar", "-n", "TCP", freq],
+    "uptime": [
+        "To check average load in the last 1, 5, 15 minutes", "uptime"],
+    "dmesg": [
+        "To check last 10 system messages", "dmesg"],
+    "vmstat": [
+        "Virtual memory load, r = number of processes waiting for CPU", "vmstat", freq],
+    "mpstat": [
+        "CPU time breakdowns per CPU", "mpstat", "-P", "ALL", freq],
+    "pidstat": [
+        "Rolling Process summary", "pidstat", freq],
+    "iostat": [
+        "Workload/Performance for block devices (disks)", "iostat", "-xz", freq],
+    "free": [
+        "Free memory in megabytes", "free", "-m"],
+    "sar DEV": [
+        "Network interface workload", "sar", "-n", "DEV", freq],
+    "sar TCP": [
+        "TCP workload", "sar", "-n", "TCP", freq],
     }
 
 for name, check in checks.items():
