@@ -11,7 +11,7 @@ filesystem = os.path.expanduser("~/programs/files/filesystem")
 os.chdir(filesystem)
 
 
-def crawl_dirs(dirs_all, dirs_process, files_all):
+def crawl_dirs(dirs_all=[], dirs_process=[], files_all=[]):
     """
     Crawl directories beginning from current directory and store them in
     dirs_all and csv-files in files_all
@@ -54,8 +54,8 @@ def change_files(files_all):
                 # Skip header line
                 if row[0] == "Full Name":
                     continue
-                    
-                # Update host names in the email addresses    
+
+                # Update host names in the email addresses
                 result = re.sub(r"(.+@)abc\.edu.*", r"\1" + "newhost.com", row[1])
                 if result:
                     print(f"Name: {row[0]:20}  Email: {result}")
@@ -64,11 +64,11 @@ def change_files(files_all):
 def main():
 
     # Call crawl_dirs function
-    dirs_all, dirs_process, files_all = crawl_dirs(list(), list(), list())
+    dirs_all, dirs_process, files_all = crawl_dirs()
 
     print("Number of csv-files: ", len(files_all), "\n")
 
     change_files(files_all)
 
-    
+
 main()
